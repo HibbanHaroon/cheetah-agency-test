@@ -1,5 +1,5 @@
 import React from "react";
-import TipButton from "./TipButton";
+import Button from "./Button";
 import Textfield from "./Textfield";
 
 function TipGrid() {
@@ -9,11 +9,11 @@ function TipGrid() {
         Select Tip %
       </label>
       <div className="mt-1 grid gap-y-1.5 gap-x-3 grid-cols-3 grid-rows-2">
-        <TipButton tipPercent={"5%"}></TipButton>
-        <TipButton tipPercent={"10%"}></TipButton>
-        <TipButton tipPercent={"15%"}></TipButton>
-        <TipButton tipPercent={"25%"}></TipButton>
-        <TipButton tipPercent={"50%"}></TipButton>
+        <Button text={"5%"}></Button>
+        <Button text={"10%"}></Button>
+        <Button text={"15%"}></Button>
+        <Button text={"25%"}></Button>
+        <Button text={"50%"}></Button>
         <Textfield placeholder={"Custom"}></Textfield>
       </div>
     </div>

@@ -3,6 +3,7 @@ import Textfield from "./Textfield";
 import DollarIcon from "../assets/icons/DollarIcon";
 import PeopleIcon from "../assets/icons/PeopleIcon";
 import TipGrid from "./TipGrid";
+import BillCard from "./BillCard";
 
 function Card() {
   return (
@@ -20,6 +21,7 @@ function Card() {
           placeholder="0"
         />
       </div>
+      <BillCard></BillCard>
     </div>
   );
 }
