@@ -10,6 +10,7 @@ function ProfilePicture() {
         width={96}
         height={96}
         loading="eager"
+        priority={true}
         alt="Profile Picture"
       />
     </div>

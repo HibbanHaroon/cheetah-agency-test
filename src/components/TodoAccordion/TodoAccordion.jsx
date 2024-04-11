@@ -5,10 +5,12 @@ import ListIcon from "../../../public/icons/ListIcon";
 function TodoAccordion() {
   return (
     <details className="mt-10 w-full h-60 group" open>
-      <summary className="p-3 list-none flex flex-row items-center justify-between cursor-pointer rounded-md ring-gray ring-1 backdrop-blur-sm">
+      <summary className="p-3 list-none flex flex-row items-center justify-between cursor-pointer rounded-md ring-primary-light ring-1 hover:ring-primary backdrop-brightness-75 backdrop-blur-sm shadow-md">
         <div className="flex items-center justify-center">
           <ListIcon></ListIcon>
-          <h3 className="ml-2 text-sm select-none">Your Todos</h3>
+          <h3 className="ml-2 text-sm select-none whitespace-nowrap">
+            Your Todos
+          </h3>
         </div>
         <div className="flex h-4 justify-end group-open:rotate-180">
           <ChevronIcon></ChevronIcon>
