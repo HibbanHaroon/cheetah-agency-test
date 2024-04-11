@@ -1,6 +1,7 @@
 import React from "react";
 import ChevronIcon from "../../../public/icons/ChevronIcon";
 import ListIcon from "../../../public/icons/ListIcon";
+import Task from "../Task";
 
 function TodoAccordion() {
   return (
@@ -17,9 +18,11 @@ function TodoAccordion() {
         </div>
       </summary>
       <div>
-        <div className="mt-2 p-10 w-full flex flex-col items-center justify-center opacity-95 rounded-md bg-white">
+        <div className="mt-2 w-full flex flex-col opacity-95 rounded-md bg-white">
           <div>
-            <p className="text-sm text-black select-none">No Task Today</p>
+            {/* <p className="text-sm text-black select-none">No Task Today</p> */}
+            <Task></Task>
+            <Task></Task>
           </div>
         </div>
       </div>

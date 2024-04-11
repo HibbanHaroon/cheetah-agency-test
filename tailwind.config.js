@@ -21,6 +21,15 @@ module.exports = {
         light: "#beb7ad",
       },
       secondary: "#d8d4ce",
+      neutral: {
+        DEFAULT: "#ded4cb",
+        light: "#ECE9E4",
+      },
+      red: {
+        DEFAULT: "#ef4444",
+        dark: "#f87171",
+        light: "#fca5a5",
+      },
       white: "#FFFFFF",
       gray: "#6b7280",
       black: "#000000",

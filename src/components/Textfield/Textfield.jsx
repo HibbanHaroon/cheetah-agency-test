@@ -3,7 +3,7 @@ import PlusIcon from "../../../public/icons/PlusIcon";
 
 function Textfield() {
   return (
-    <div className="relative mt-1 w-full rounded-md shadow-sm mt-7">
+    <div className="relative w-full rounded-md shadow-sm mt-8">
       <input
         type="text"
         className="flex w-full rounded-md border-0 py-2 pl-3 pr-11 bg-white text-black placeholder:text-gray hover:ring-1 hover:ring-primary-light focus:ring-2 focus:ring-offset focus:outline-0 focus:ring-primary sm:text-sm sm:leading-6"
