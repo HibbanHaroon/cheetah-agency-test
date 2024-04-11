@@ -4,7 +4,7 @@ import Textfield from "./Textfield";
 
 function TipGrid() {
   return (
-    <div className="mt-1">
+    <div className="mt-1 max-w-sm">
       <label className="mt-2 flex justify-start text-sm font-medium leading-6 text-gray">
         Select Tip %
       </label>
