@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Task = require("./models/task.model");
+const taskRoute = require("./routes/task.route");
+
 const app = express();
 
 // Configuring it to use JSON in the request body
@@ -9,64 +11,13 @@ app.use(express.json());
 // Configuring it to use Form URL Encoded in the request body
 app.use(express.urlencoded({ extended: true }));
 
+// Routes
+app.use("/api/tasks", taskRoute);
+
 app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
-// GET - Fetching all the tasks
-app.get("/api/tasks", async (req, res) => {
-  try {
-    const tasks = await Task.find({});
-    res.status(200).json(tasks);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// GET :id - Fetching a task corresponding the given id
-app.get("/api/task/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const task = await Task.findById(id);
-    res.status(200).json(task);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// POST - Creating a new task
-app.post("/api/tasks", async (req, res) => {
-  try {
-    const task = await Task.create(req.body);
-    res.status(200).json(task);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// PUT - Updating a task corresponding the given id and returning that updating
-app.put("/api/task/:id", async (req, res) => {
-  const { id } = req.params;
-  const task = await Task.findByIdAndUpdate(id, req.body);
-
-  if (!task) {
-    return res.status(404).json({ message: "Task not Found" });
-  }
-
-  const updatedTask = await Task.findById(id);
-  res.status(200).json(updatedTask);
-});
-
-// DELETE - Deleting a task corresponding the given id
-app.delete("/api/task/:id", async (req, res) => {
-  const { id } = req.params;
-  const task = await Task.findByIdAndDelete(id);
-
-  if (!task) {
-    return res.status(404).json({ message: "Task not Found" });
-  }
-
-  res.status(200).json({ message: "Task deleted successfully" });
+  res.send(
+    "Welcome to Todo List Api! <br>Here lies the backend for the project Todo List App made for the skill assessment test in Cheetah Agency."
+  );
 });
 
 const username = process.env.MONGODB_USERNAME;
