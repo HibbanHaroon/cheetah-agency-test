@@ -1,7 +1,12 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import PlusIcon from "../../../public/icons/PlusIcon";
+import { useAppContext } from "@/context/store";
 
 function Textfield() {
+  const { taskList, setTaskList } = useAppContext();
+
   return (
     <div className="relative w-full rounded-md shadow-sm mt-8">
       <input

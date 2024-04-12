@@ -1,13 +1,18 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import ChevronIcon from "../../../public/icons/ChevronIcon";
 import ListIcon from "../../../public/icons/ListIcon";
 import Task from "../Task";
+import { useAppContext } from "@/context/store";
 
 function TodoAccordion() {
+  const { taskList, setTaskList } = useAppContext();
+
   return (
     <details className="mt-10 w-full h-60 group" open>
       <summary className="p-3 list-none flex flex-row items-center justify-between cursor-pointer rounded-md ring-primary-light ring-1 hover:ring-primary backdrop-brightness-75 backdrop-blur-sm shadow-md">
-        <div className="flex items-center justify-center">
+        <div className="flex h-5 items-center justify-center">
           <ListIcon></ListIcon>
           <h3 className="ml-2 text-sm select-none whitespace-nowrap">
             Your Todos

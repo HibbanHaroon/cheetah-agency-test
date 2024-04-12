@@ -3,8 +3,10 @@
 import React, { useState } from "react";
 import CheckCircleIcon from "../../../public/icons/CheckCircleIcon";
 import DotIcon from "../../../public/icons/DotIcon";
+import { useAppContext } from "@/context/store";
 
 function Task() {
+  const { taskList, setTaskList } = useAppContext();
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
 
   return (
