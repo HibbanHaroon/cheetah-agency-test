@@ -40,6 +40,19 @@ app.post("/api/tasks", async (req, res) => {
   }
 });
 
+// PUT - Updating a task corresponding the given id
+app.put("/api/task/:id", async (req, res) => {
+  const { id } = req.params;
+  const task = await Task.findByIdAndUpdate(id, req.body);
+
+  if (!task) {
+    return res.status(404).json({ message: "Task not Found" });
+  }
+
+  const updatedTask = await Task.findById(id);
+  res.status(200).json(updatedTask);
+});
+
 const username = process.env.MONGODB_USERNAME;
 const password = process.env.MONGODB_PASSWORD;
 const cluster = process.env.MONGODB_CLUSTER;
