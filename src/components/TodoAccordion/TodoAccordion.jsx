@@ -1,18 +1,49 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { useAppContext } from "@/context/store";
+import Task from "../Task";
 import ChevronIcon from "../../../public/icons/ChevronIcon";
 import ListIcon from "../../../public/icons/ListIcon";
-import Task from "../Task";
-import { useAppContext } from "@/context/store";
 
 function TodoAccordion() {
   const { taskList, setTaskList } = useAppContext();
 
+  const updateTask = (id, updatedContent) => {
+    updatedContent.trim();
+    setTaskList(
+      taskList.map((task) =>
+        task.id === id
+          ? {
+              ...task,
+              content: updatedContent,
+            }
+          : task
+      )
+    );
+  };
+
+  const deleteTask = (id) => {
+    setTaskList(taskList.filter((task) => task.id !== id));
+  };
+
+  const toggleCrossed = (id) => {
+    setTaskList(
+      taskList.map((task) =>
+        task.id === id
+          ? {
+              ...task,
+              status: task.status === "Pending" ? "Completed" : "Pending",
+            }
+          : task
+      )
+    );
+  };
+
   return (
     <details className="mt-10 w-full h-60 group" open>
       <summary className="p-3 list-none flex flex-row items-center justify-between cursor-pointer rounded-md ring-primary-light ring-1 hover:ring-primary backdrop-brightness-75 backdrop-blur-sm shadow-md">
-        <div className="flex h-5 items-center justify-center">
+        <div className="flex h-6 items-center justify-center">
           <ListIcon></ListIcon>
           <h3 className="ml-2 text-sm select-none whitespace-nowrap">
             Your Todos
@@ -22,14 +53,22 @@ function TodoAccordion() {
           <ChevronIcon></ChevronIcon>
         </div>
       </summary>
-      <div>
-        <div className="mt-2 w-full flex flex-col opacity-95 rounded-md bg-white">
-          <div>
-            {/* <p className="text-sm text-black select-none">No Task Today</p> */}
-            <Task></Task>
-            <Task></Task>
-          </div>
-        </div>
+      <div className="mt-2 w-full h-60 flex flex-col items-start bg-neutral opacity-95 rounded-md bg-neutra overflow-y-auto">
+        {taskList.length == [] ? (
+          <p className="text-sm self-center text-black select-none flex-grow flex items-center justify-center">
+            No Task Today
+          </p>
+        ) : (
+          taskList.map((task) => (
+            <Task
+              key={task.id}
+              task={task}
+              updateTask={updateTask}
+              deleteTask={deleteTask}
+              toggleCrossed={toggleCrossed}
+            />
+          ))
+        )}
       </div>
     </details>
   );
