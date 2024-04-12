@@ -53,6 +53,18 @@ app.put("/api/task/:id", async (req, res) => {
   res.status(200).json(updatedTask);
 });
 
+// DELETE - Deleting a task corresponding the given id
+app.delete("/api/task/:id", async (req, res) => {
+  const { id } = req.params;
+  const task = await Task.findByIdAndDelete(id);
+
+  if (!task) {
+    return res.status(404).json({ message: "Task not Found" });
+  }
+
+  res.status(200).json({ message: "Task deleted successfully" });
+});
+
 const username = process.env.MONGODB_USERNAME;
 const password = process.env.MONGODB_PASSWORD;
 const cluster = process.env.MONGODB_CLUSTER;
