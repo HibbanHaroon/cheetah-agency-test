@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 const Task = require("./models/task.model");
 const app = express();
 
+// Configuring it to use JSON in the request body
 app.use(express.json());
+
+// Configuring it to use Form URL Encoded in the request body
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Hello World");
@@ -40,7 +44,7 @@ app.post("/api/tasks", async (req, res) => {
   }
 });
 
-// PUT - Updating a task corresponding the given id
+// PUT - Updating a task corresponding the given id and returning that updating
 app.put("/api/task/:id", async (req, res) => {
   const { id } = req.params;
   const task = await Task.findByIdAndUpdate(id, req.body);
