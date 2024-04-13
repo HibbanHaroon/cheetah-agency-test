@@ -1,37 +1,24 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAppContext } from "@/context/store";
 import PlusIcon from "../../../public/icons/PlusIcon";
+import { createTask } from "@/lib/service";
 
 function Textfield() {
-  const { taskList, setTaskList } = useAppContext();
   const [taskContent, setTaskContent] = useState("");
 
-  const addTask = () => {
+  const addTask = async () => {
     if (taskContent.trim() !== "") {
-      const currentDate = new Date();
+      const task = {
+        content: `${taskContent}`,
+        status: "Pending",
+      };
 
-      const formattedDate = `${currentDate.getDate()}/${
-        currentDate.getMonth() + 1
-      }/${currentDate.getFullYear()}, ${currentDate.toLocaleString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-        hour12: true,
-      })}`;
-
-      const formattedId = `${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}${currentDate.getMilliseconds()}`;
-
-      setTaskList([
-        {
-          id: formattedId,
-          content: taskContent,
-          createdAt: formattedDate,
-          status: "Pending",
-        },
-        ...taskList,
-      ]);
+      const createResponse = await createTask(task);
+      if (createResponse) {
+        console.log("Created Task successfully.");
+        //display task added snackbar
+      }
 
       setTaskContent("");
     }
