@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useAppContext } from "@/context/store";
 import Task from "../Task";
 import ChevronIcon from "../../../public/icons/ChevronIcon";
@@ -12,8 +13,32 @@ import {
   updateTaskById,
 } from "@/lib/service";
 
+// Dyanmically importing disables loading react-beautiful-dnd modules in the SSR mode.
+const DragDropContext = dynamic(
+  () =>
+    import("react-beautiful-dnd").then((mod) => {
+      return mod.DragDropContext;
+    }),
+  { ssr: false }
+);
+const Droppable = dynamic(
+  () =>
+    import("react-beautiful-dnd").then((mod) => {
+      return mod.Droppable;
+    }),
+  { ssr: false }
+);
+const Draggable = dynamic(
+  () =>
+    import("react-beautiful-dnd").then((mod) => {
+      return mod.Draggable;
+    }),
+  { ssr: false }
+);
+
 function TodoAccordion() {
   const { taskList, setTaskList } = useAppContext();
+  const [draggedIndex, setDraggedIndex] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,6 +106,17 @@ function TodoAccordion() {
     }
   };
 
+  const handleDragEnd = (result) => {
+    setDraggedIndex(null);
+
+    if (!result.destination) return;
+
+    // const updatedGoals = Array.from(goals);
+    // const [movedGoal] = updatedGoals.splice(result.source.index, 1);
+    // updatedGoals.splice(result.destination.index, 0, movedGoal);
+    // setGoals(updatedGoals);
+  };
+
   return (
     <details className="mt-10 w-full h-60 group" open>
       <summary className="p-3 list-none flex flex-row items-center justify-between cursor-pointer rounded-md ring-primary-light ring-1 hover:ring-primary backdrop-brightness-75 backdrop-blur-sm shadow-md">
@@ -94,22 +130,49 @@ function TodoAccordion() {
           <ChevronIcon></ChevronIcon>
         </div>
       </summary>
-      <div className="mt-2 w-full h-60 flex flex-col items-start bg-neutral opacity-95 rounded-md bg-neutra overflow-y-auto">
-        {taskList.length == 0 ? (
-          <p className="text-sm self-center text-black select-none flex-grow flex items-center justify-center">
-            No Task Today
-          </p>
-        ) : (
-          taskList.map((task) => (
-            <Task
-              key={task._id}
-              task={task}
-              updateTask={updateTask}
-              deleteTask={deleteTask}
-              statusChanged={statusChanged}
-            />
-          ))
-        )}
+      <div className="task-list">
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="task-list" type="group" direction="vertical">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="mt-2 w-full h-60 flex flex-col items-start bg-neutral opacity-95 rounded-md bg-neutra overflow-y-auto"
+              >
+                {taskList.length == 0 ? (
+                  <p className="text-sm self-center text-black select-none flex-grow flex items-center justify-center">
+                    No Task Today
+                  </p>
+                ) : (
+                  taskList.map((task, index) => (
+                    <Draggable
+                      key={task._id}
+                      draggableId={task._id}
+                      index={index}
+                      isDragDisabled={
+                        draggedIndex !== null && draggedIndex !== index
+                      }
+                    >
+                      {(provided, snapshot) => (
+                        <Task
+                          key={task._id}
+                          task={task}
+                          index={index}
+                          updateTask={updateTask}
+                          deleteTask={deleteTask}
+                          statusChanged={statusChanged}
+                          provided={provided}
+                          snapshot={snapshot}
+                        />
+                      )}
+                    </Draggable>
+                  ))
+                )}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
     </details>
   );
