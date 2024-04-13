@@ -12,7 +12,7 @@ export async function getTasks() {
     return {
       success: true,
       data: {
-        response: result.results,
+        response: result,
       },
     };
   } catch (error) {
@@ -69,8 +69,13 @@ export async function updateTaskById(taskId, updatedData) {
     });
     if (!response.ok) {
       throw new Error("Failed to update task");
+    } else {
+      const result = await response.json();
+      return {
+        success: true,
+        message: result,
+      };
     }
-    return await response.json();
   } catch (error) {
     return { status: "Error", message: error.message };
   }
@@ -78,11 +83,17 @@ export async function updateTaskById(taskId, updatedData) {
 
 export async function deleteTaskById(taskId) {
   try {
-    const response = await fetch(`${API_URL}/${taskId}`, {
+    const response = await fetch(`${API_URL}/tasks/${taskId}`, {
       method: "DELETE",
     });
     if (!response.ok) {
       throw new Error("Failed to delete task");
+    } else {
+      const result = await response.json();
+      return {
+        success: true,
+        message: result,
+      };
     }
   } catch (error) {
     return { status: "Error", message: error.message };

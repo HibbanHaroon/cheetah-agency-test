@@ -1,43 +1,84 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppContext } from "@/context/store";
 import Task from "../Task";
 import ChevronIcon from "../../../public/icons/ChevronIcon";
 import ListIcon from "../../../public/icons/ListIcon";
+import {
+  deleteTaskById,
+  getTaskById,
+  getTasks,
+  updateTaskById,
+} from "@/lib/service";
 
 function TodoAccordion() {
   const { taskList, setTaskList } = useAppContext();
 
-  const updateTask = (id, updatedContent) => {
-    updatedContent.trim();
-    setTaskList(
-      taskList.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              content: updatedContent,
-            }
-          : task
-      )
-    );
+  useEffect(() => {
+    const fetchData = async () => {
+      viewTasks();
+    };
+
+    fetchData();
+  }, []);
+
+  const viewTasks = async () => {
+    const tasksResponse = await getTasks();
+
+    if (tasksResponse.success === false) {
+      console.log("Something went wrong");
+      // display error in snackbar
+    } else {
+      setTaskList(tasksResponse.data.response);
+    }
   };
 
-  const deleteTask = (id) => {
-    setTaskList(taskList.filter((task) => task.id !== id));
+  const updateTask = async (id, content, status) => {
+    content.trim();
+
+    const data = {
+      content: `${content}`,
+      status: `${status}`,
+    };
+
+    const updateResponse = await updateTaskById(id, data);
+
+    if (updateResponse.success === true) {
+      console.log("Task Updated Successfully.");
+      viewTasks();
+    } else {
+      console.log("Something went wrong!");
+      // display error in snackbar
+    }
   };
 
-  const toggleCrossed = (id) => {
-    setTaskList(
-      taskList.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              status: task.status === "Pending" ? "Completed" : "Pending",
-            }
-          : task
-      )
-    );
+  const deleteTask = async (id) => {
+    const deleteResponse = await deleteTaskById(id);
+    console.log(deleteResponse);
+
+    if (deleteResponse.success === true) {
+      console.log("Task Deleted Successfully.");
+      viewTasks();
+    } else {
+      console.log("Something went wrong!");
+      // display error in snackbar
+    }
+  };
+
+  const statusChanged = async (id) => {
+    const taskResponse = await getTaskById(id);
+    console.log(taskResponse);
+
+    if (taskResponse.success === false) {
+      console.log("Something went wrong!");
+      // display error in snackbar
+    } else {
+      const task = taskResponse.data;
+      const status = task.status === "Pending" ? "Completed" : "Pending";
+
+      updateTask(id, task.content, status);
+    }
   };
 
   return (
@@ -54,18 +95,18 @@ function TodoAccordion() {
         </div>
       </summary>
       <div className="mt-2 w-full h-60 flex flex-col items-start bg-neutral opacity-95 rounded-md bg-neutra overflow-y-auto">
-        {taskList.length == [] ? (
+        {taskList.length == 0 ? (
           <p className="text-sm self-center text-black select-none flex-grow flex items-center justify-center">
             No Task Today
           </p>
         ) : (
           taskList.map((task) => (
             <Task
-              key={task.id}
+              key={task._id}
               task={task}
               updateTask={updateTask}
               deleteTask={deleteTask}
-              toggleCrossed={toggleCrossed}
+              statusChanged={statusChanged}
             />
           ))
         )}

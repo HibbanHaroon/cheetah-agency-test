@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import CheckCircleIcon from "../../../public/icons/CheckCircleIcon";
 import DotIcon from "../../../public/icons/DotIcon";
 
-function Task({ task, updateTask, deleteTask, toggleCrossed }) {
+function Task({ task, updateTask, deleteTask, statusChanged }) {
   const [updatedTaskContent, setUpdatedTaskContent] = useState(task.content);
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
 
@@ -17,7 +17,7 @@ function Task({ task, updateTask, deleteTask, toggleCrossed }) {
       <div
         className="m-1 w-8 h-8 absolute inset-y-0 start-0 flex items-center px-1 cursor-pointer"
         onClick={() => {
-          toggleCrossed(task.id);
+          statusChanged(task._id);
         }}
       >
         {task.status === "Pending" ? (
@@ -42,7 +42,7 @@ function Task({ task, updateTask, deleteTask, toggleCrossed }) {
         onInput={(e) => {
           const updatedContent = e.target.value;
           setUpdatedTaskContent(updatedContent);
-          updateTask(task.id, updatedContent);
+          updateTask(task._id, updatedContent, task.status);
         }}
       />
       <div className="m-1 w-8 h-8 absolute inset-y-0 end-0 flex items-center px-1 cursor-grab">
@@ -61,7 +61,7 @@ function Task({ task, updateTask, deleteTask, toggleCrossed }) {
           <button
             className="mt-2 p-2 w-full rounded-md bg-red-light hover:bg-red-dark hover:text-white text-red"
             onClick={() => {
-              deleteTask(task.id);
+              deleteTask(task._id);
             }}
           >
             Delete
