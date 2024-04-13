@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Task = require("./models/task.model");
 const taskRoute = require("./routes/task.route");
+const swaggerDocs = require("./utils/swagger");
 
 const app = express();
 
@@ -27,12 +28,15 @@ const database = process.env.MONGODB_DATABASE;
 
 const connectionString = `mongodb+srv://${username}:${password}@${cluster}/${database}?retryWrites=true&w=majority`;
 
+const port = "3000";
+
 mongoose
   .connect(connectionString)
   .then(() => {
     console.log("Connected to Database!");
-    app.listen(3000, () => {
-      console.log("Server is running on port 3000");
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+      swaggerDocs(app, port);
     });
   })
   .catch(() => {
