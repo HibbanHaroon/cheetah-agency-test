@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useAppContext } from "@/context/store";
 import PlusIcon from "../../../public/icons/PlusIcon";
 import { createTask } from "@/lib/service";
+import { toastMessage } from "@/utils/ToastMessage";
 
 function Textfield() {
   const { taskList, setTaskList } = useAppContext();
@@ -18,9 +19,9 @@ function Textfield() {
 
       const createResponse = await createTask(task);
       if (createResponse) {
-        console.log("Created Task successfully.");
+        console.log("Added Task successfully.");
         setTaskList([...taskList, createResponse]);
-        //display task added snackbar
+        toastMessage("Task Added!", "✅");
       }
 
       setTaskContent("");

@@ -12,6 +12,7 @@ import {
   getTasks,
   updateTaskById,
 } from "@/lib/service";
+import { toastMessage } from "@/utils/ToastMessage";
 
 // Dyanmically importing disables loading react-beautiful-dnd modules in the SSR mode.
 const DragDropContext = dynamic(
@@ -53,7 +54,7 @@ function TodoAccordion() {
 
     if (tasksResponse.success === false) {
       console.log("Something went wrong");
-      // display error in snackbar
+      toastMessage("Something went wrong", "❌");
     } else {
       setTaskList(tasksResponse.data.response);
     }
@@ -74,7 +75,7 @@ function TodoAccordion() {
       viewTasks();
     } else {
       console.log("Something went wrong!");
-      // display error in snackbar
+      toastMessage("Something went wrong", "❌");
     }
   };
 
@@ -84,10 +85,11 @@ function TodoAccordion() {
 
     if (deleteResponse.success === true) {
       console.log("Task Deleted Successfully.");
+      toastMessage("Task Deleted!", "✅");
       viewTasks();
     } else {
       console.log("Something went wrong!");
-      // display error in snackbar
+      toastMessage("Something went wrong", "❌");
     }
   };
 
@@ -97,7 +99,7 @@ function TodoAccordion() {
 
     if (taskResponse.success === false) {
       console.log("Something went wrong!");
-      // display error in snackbar
+      toastMessage("Something went wrong", "❌");
     } else {
       const task = taskResponse.data;
       const status = task.status === "Pending" ? "Completed" : "Pending";
