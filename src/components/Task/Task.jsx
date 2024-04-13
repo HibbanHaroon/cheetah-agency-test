@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import CheckCircleIcon from "../../../public/icons/CheckCircleIcon";
 import DotIcon from "../../../public/icons/DotIcon";
+import { convertDateTime } from "@/utils/convertDateTime";
 
 function Task({ task, updateTask, deleteTask, statusChanged }) {
   const [updatedTaskContent, setUpdatedTaskContent] = useState(task.content);
@@ -56,7 +57,7 @@ function Task({ task, updateTask, deleteTask, statusChanged }) {
           </p>
           <p className="m-1 px-2 text-sm text-black">
             <strong>Created At: </strong>
-            {task.createdAt}
+            {convertDateTime(task.createdAt)}
           </p>
           <button
             className="mt-2 p-2 w-full rounded-md bg-red-light hover:bg-red-dark hover:text-white text-red"
