@@ -121,7 +121,7 @@ function TodoAccordion() {
 
   return (
     <details className="mt-10 w-full h-60 group" open>
-      <summary className="p-3 list-none flex flex-row items-center justify-between cursor-pointer rounded-md ring-primary-light ring-1 hover:ring-primary backdrop-brightness-75 backdrop-blur-sm shadow-md">
+      <summary className="p-3 list-none flex flex-row items-center justify-between cursor-pointer rounded-md ring-primary-light ring-1 hover:ring-primary backdrop-brightness-75 backdrop-blur-sm shadow-md transition duration-200 ease">
         <div className="flex h-6 items-center justify-center">
           <ListIcon></ListIcon>
           <h3 className="ml-2 text-sm select-none whitespace-nowrap">

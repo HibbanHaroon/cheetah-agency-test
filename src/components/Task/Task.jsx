@@ -56,7 +56,7 @@ function Task({
         style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
       >
         <div
-          className="m-1 w-8 absolute inset-y-0 start-0 flex item-center px-1 cursor-pointer"
+          className="m-1 w-8 absolute inset-y-0 start-0 flex item-center px-1 cursor-pointer hover:scale-110 transition duration-200 ease"
           onClick={() => {
             statusChanged(task._id);
           }}
@@ -88,7 +88,7 @@ function Task({
         />
         <div
           {...provided.dragHandleProps}
-          className="drag-icon-container m-1 w-8 absolute inset-y-0 end-0 flex items-center px-1 cursor-grab"
+          className="drag-icon-container m-1 w-8 absolute inset-y-0 end-0 flex items-center px-1 cursor-grab hover:scale-110 transition duration-200 ease"
         >
           <DotIcon></DotIcon>
         </div>
@@ -109,7 +109,7 @@ function Task({
             {convertDateTime(task.createdAt)}
           </p>
           <button
-            className="mt-2 p-2 w-full rounded-md bg-red-light hover:bg-red-dark hover:text-white text-red"
+            className="mt-2 p-2 w-full rounded-md bg-red-light hover:bg-red-dark hover:text-white text-red transition duration-200 ease"
             onClick={() => {
               deleteTask(task._id);
             }}
