@@ -12,7 +12,7 @@ import {
   getTasks,
   updateTaskById,
 } from "@/lib/service";
-import { toastMessage } from "@/utils/ToastMessage";
+import { toastMessage } from "@/utils/toastMessage";
 
 // Dyanmically importing disables loading react-beautiful-dnd modules in the SSR mode.
 const DragDropContext = dynamic(
