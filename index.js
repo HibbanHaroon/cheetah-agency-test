@@ -1,11 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const Task = require("./models/task.model");
 const taskRoute = require("./routes/task.route");
 const swaggerDocs = require("./utils/swagger");
 
 const app = express();
 
+app.use(cors());
 // Configuring it to use JSON in the request body
 app.use(express.json());
 
@@ -28,7 +30,7 @@ const database = process.env.MONGODB_DATABASE;
 
 const connectionString = `mongodb+srv://${username}:${password}@${cluster}/${database}?retryWrites=true&w=majority`;
 
-const port = "3000";
+const port = "8080";
 
 mongoose
   .connect(connectionString)
