@@ -30,7 +30,7 @@ const database = process.env.MONGODB_DATABASE;
 
 const connectionString = `mongodb+srv://${username}:${password}@${cluster}/${database}?retryWrites=true&w=majority`;
 
-const port = "8080";
+var port = process.env.PORT || 8080;
 
 mongoose
   .connect(connectionString)
