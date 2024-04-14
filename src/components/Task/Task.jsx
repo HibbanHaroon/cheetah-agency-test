@@ -77,7 +77,9 @@ function Task({
         </div>
         <input
           type="text"
-          className="flex w-full border-0 py-2 pl-11 pr-11 bg-neutral text-black placeholder:text-gray rounded-t-md focus:outline-2 focus:outline-primary sm:text-sm sm:leading-6"
+          className={`flex w-full border-0 py-2 pl-11 pr-11 bg-neutral text-black placeholder:text-gray rounded-t-md focus:outline-2 focus:outline-primary sm:text-sm sm:leading-6 ${
+            task.status === "Completed" ? "line-through" : ""
+          }`}
           placeholder="Add new task"
           value={updatedTaskContent}
           onInput={(e) => {

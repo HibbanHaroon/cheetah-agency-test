@@ -1,6 +1,6 @@
 "use server";
 
-const API_URL = "http://localhost:8080/api";
+const API_URL = "https://todo-list-api-baq9.onrender.com/api";
 
 export async function getTasks() {
   try {
@@ -48,7 +48,6 @@ export async function getTaskById(taskId) {
       throw new Error("Task not found");
     }
     const result = await response.json();
-    console.log("result", result);
     return { success: true, data: result };
   } catch (error) {
     return {
