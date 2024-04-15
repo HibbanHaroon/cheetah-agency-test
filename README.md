@@ -55,7 +55,7 @@ I learnt a lot while building this project, a few things are below:
 
 NOTE: If you're using this on a fresh day, there might be a 30 seconds initial delay when adding a task, as the Backend is deployed on Render, the server goes to sleep after 30 minutes inactivity.
 
-![Todo List App](https://youtu.be/vylDUN3rMcw)
+[![Watch the Demo](https://imgur.com/6HEE4zi)](https://youtu.be/vylDUN3rMcw)
 
 
 ## Deployed URLs
