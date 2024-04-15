@@ -39,3 +39,12 @@ export async function addTaskId(id) {
   orderList.push(id);
   await redis.set("orderList", JSON.stringify(orderList));
 }
+
+export async function deleteTaskId(id) {
+  let orderList = await getOrderList([]);
+  const index = orderList.findIndex((taskId) => taskId === id);
+
+  orderList.splice(index, 1);
+
+  await redis.set("orderList", JSON.stringify(orderList));
+}

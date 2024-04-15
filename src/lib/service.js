@@ -1,5 +1,5 @@
 "use server";
-import { addTaskId, getOrderList } from "./redis";
+import { addTaskId, getOrderList, deleteTaskId } from "./redis";
 
 const API_URL = "https://todo-list-api-baq9.onrender.com/api";
 
@@ -95,18 +95,21 @@ export async function updateTaskById(taskId, updatedData) {
 
 export async function deleteTaskById(taskId) {
   try {
+    // Deleting the task id from order list in Redis
+    let result = await deleteTaskId(taskId);
     const response = await fetch(`${API_URL}/tasks/${taskId}`, {
       method: "DELETE",
     });
     if (!response.ok) {
       throw new Error("Failed to delete task");
     } else {
-      const result = await response.json();
-      return {
-        success: true,
-        message: result,
-      };
+      result = await response.json();
     }
+
+    return {
+      success: true,
+      message: result,
+    };
   } catch (error) {
     return { status: "Error", message: error.message };
   }

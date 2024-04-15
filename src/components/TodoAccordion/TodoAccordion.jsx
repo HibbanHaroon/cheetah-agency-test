@@ -95,7 +95,8 @@ function TodoAccordion() {
       // Only delete will have an effect on the orderList, update function will update the tasks and not the list.
       // Changing the order of the list upon deletion
       const index = orderList.indexOf(id);
-      setOrderList(orderList.splice(index, 1));
+      orderList.splice(index, 1);
+      setOrderList(orderList);
     } else {
       console.log("Something went wrong!");
       toastMessage("Something went wrong", "❌");
