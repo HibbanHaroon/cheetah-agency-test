@@ -12,6 +12,7 @@ import {
   getTasks,
   updateTaskById,
 } from "@/lib/service";
+import { saveOrderList } from "@/lib/redis";
 import { toastMessage } from "@/utils/toastMessage";
 
 // Dyanmically importing disables loading react-beautiful-dnd modules in the SSR mode.
@@ -38,9 +39,10 @@ const Draggable = dynamic(
 );
 
 function TodoAccordion() {
-  const { taskList, setTaskList } = useAppContext();
+  const { taskList, setTaskList, orderList, setOrderList } = useAppContext();
   const [draggedIndex, setDraggedIndex] = useState(null);
 
+  // This useEffect will be run only once due to empty dependency list, and will fetch the viewTasks when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       viewTasks();
@@ -50,13 +52,14 @@ function TodoAccordion() {
   }, []);
 
   const viewTasks = async () => {
-    const tasksResponse = await getTasks();
+    const response = await getTasks();
 
-    if (tasksResponse.success === false) {
+    if (response.success === false) {
       console.log("Something went wrong");
       toastMessage("Something went wrong", "❌");
     } else {
-      setTaskList(tasksResponse.data.response);
+      setTaskList(response.data.taskList);
+      setOrderList(response.data.orderList);
     }
   };
 
@@ -72,6 +75,7 @@ function TodoAccordion() {
 
     if (updateResponse.success === true) {
       console.log("Task Updated Successfully.");
+      // To fetch the taskList upon update
       viewTasks();
     } else {
       console.log("Something went wrong!");
@@ -81,12 +85,17 @@ function TodoAccordion() {
 
   const deleteTask = async (id) => {
     const deleteResponse = await deleteTaskById(id);
-    console.log(deleteResponse);
 
     if (deleteResponse.success === true) {
       console.log("Task Deleted Successfully.");
       toastMessage("Task Deleted!", "✅");
+      // To fetch the taskList upon deletion
       viewTasks();
+
+      // Only delete will have an effect on the orderList, update function will update the tasks and not the list.
+      // Changing the order of the list upon deletion
+      const index = orderList.indexOf(id);
+      setOrderList(orderList.splice(index, 1));
     } else {
       console.log("Something went wrong!");
       toastMessage("Something went wrong", "❌");
@@ -95,7 +104,6 @@ function TodoAccordion() {
 
   const statusChanged = async (id) => {
     const taskResponse = await getTaskById(id);
-    console.log(taskResponse);
 
     if (taskResponse.success === false) {
       console.log("Something went wrong!");
@@ -108,15 +116,19 @@ function TodoAccordion() {
     }
   };
 
-  const handleDragEnd = (result) => {
+  const handleDragEnd = async (result) => {
     setDraggedIndex(null);
 
     if (!result.destination) return;
 
-    // const updatedGoals = Array.from(goals);
-    // const [movedGoal] = updatedGoals.splice(result.source.index, 1);
-    // updatedGoals.splice(result.destination.index, 0, movedGoal);
-    // setGoals(updatedGoals);
+    // Order List has tasks id inside in order
+    // Moving the id from the previous position(source), to the dropped position(destination) and adding it back to the orderList
+    const [movedTaskId] = orderList.splice(result.source.index, 1);
+    orderList.splice(result.destination.index, 0, movedTaskId);
+    setOrderList(orderList);
+
+    // Saving the order list in redis
+    await saveOrderList(orderList);
   };
 
   return (
@@ -146,10 +158,10 @@ function TodoAccordion() {
                     No Task Today
                   </p>
                 ) : (
-                  taskList.map((task, index) => (
+                  orderList.map((taskId, index) => (
                     <Draggable
-                      key={task._id}
-                      draggableId={task._id}
+                      key={taskId}
+                      draggableId={taskId}
                       index={index}
                       isDragDisabled={
                         draggedIndex !== null && draggedIndex !== index
@@ -157,9 +169,8 @@ function TodoAccordion() {
                     >
                       {(provided, snapshot) => (
                         <Task
-                          key={task._id}
-                          task={task}
-                          index={index}
+                          key={taskId}
+                          task={taskList.find((task) => task._id === taskId)}
                           updateTask={updateTask}
                           deleteTask={deleteTask}
                           statusChanged={statusChanged}

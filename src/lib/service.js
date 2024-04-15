@@ -1,4 +1,5 @@
 "use server";
+import { addTaskId, getOrderList } from "./redis";
 
 const API_URL = "https://todo-list-api-baq9.onrender.com/api";
 
@@ -8,11 +9,17 @@ export async function getTasks() {
     if (!response.ok) {
       throw new Error("Failed to fetch tasks");
     }
-    const result = await response.json();
+    const taskList = await response.json();
+
+    // Getting Order List from Redis
+    const taskIds = taskList.map((task) => task._id);
+    const orderList = await getOrderList(taskIds);
+
     return {
       success: true,
       data: {
-        response: result,
+        taskList: taskList,
+        orderList: orderList,
       },
     };
   } catch (error) {
@@ -35,7 +42,13 @@ export async function createTask(task) {
     if (!response.ok) {
       throw new Error("Failed to create task");
     }
-    return await response.json();
+
+    const createdTask = await response.json();
+
+    // Adding the Task Id of a new task to the order list in Redis
+    await addTaskId(createdTask._id);
+
+    return createdTask;
   } catch (error) {
     return { status: "Error", message: error.message };
   }

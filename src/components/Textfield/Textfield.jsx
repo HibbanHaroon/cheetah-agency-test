@@ -7,7 +7,7 @@ import { createTask } from "@/lib/service";
 import { toastMessage } from "@/utils/toastMessage";
 
 function Textfield() {
-  const { taskList, setTaskList } = useAppContext();
+  const { taskList, setTaskList, orderList, setOrderList } = useAppContext();
   const [taskContent, setTaskContent] = useState("");
 
   const addTask = async () => {
@@ -17,10 +17,12 @@ function Textfield() {
         status: "Pending",
       };
 
-      const createResponse = await createTask(task);
-      if (createResponse) {
+      const createdTask = await createTask(task);
+      if (createTask) {
         console.log("Added Task successfully.");
-        setTaskList([...taskList, createResponse]);
+        setTaskList([...taskList, createdTask]);
+        setOrderList([...orderList, createdTask._id]);
+
         toastMessage("Task Added!", "✅");
       }
 
